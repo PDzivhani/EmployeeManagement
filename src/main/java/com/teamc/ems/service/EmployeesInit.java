@@ -11,6 +11,8 @@ public interface EmployeesInit {
     Employees getEmployeeById(Long id);
 
     Employees createEmployee(Employees employee);
+
     Employees updateEmployee(Long id, Employees employee);
+
     void deleteEmployee(Long id);
 }
