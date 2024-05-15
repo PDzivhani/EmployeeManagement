@@ -12,7 +12,9 @@ public interface EmployeesInit {
 
     Employees createEmployee(Employees employee);
 
-    Employees updateEmployee(Long id, Employees employee);
+    void saveEmployees(Employees employees);
+
+    void updateEmployee(Long id, Employees employee);
 
     void deleteEmployee(Long id);
 }

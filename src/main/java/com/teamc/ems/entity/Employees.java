@@ -8,8 +8,10 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -26,11 +28,11 @@ public class Employees {
     @NonNull
     private String surname;
 
-    @NonNull
-    private int birthday;
+    @DateTimeFormat(pattern = "dd-MM-yyyy")
+    private Date birthday;
 
     @NonNull
-    private int idNo;
+    private String idNo;
 
     @NonNull
     private String workRole;
@@ -38,14 +40,14 @@ public class Employees {
     @NonNull
     private String department;
 
-    @CreatedDate
-    private LocalDate startDate;
+    @DateTimeFormat(pattern = "dd-MM-yyyy")
+    private Date startDate;
 
     @NonNull
     private String address;
 
     @NonNull
-    private int phoneNumber;
+    private String phoneNumber;
 
     @NonNull
     private String image;
@@ -54,7 +56,7 @@ public class Employees {
     private String gender;
 
     @NonNull
-    private Long password;
+    private String password;
 
     @NonNull
     private String email;
@@ -66,7 +68,7 @@ public class Employees {
     private String emergencyContactRelationship;
 
     @NonNull
-    private int emergencyContactNo;
+    private String emergencyContactNo;
 
 
 
