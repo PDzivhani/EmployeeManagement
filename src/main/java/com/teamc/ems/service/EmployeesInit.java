@@ -16,5 +16,5 @@ public interface EmployeesInit {
 
     void updateEmployee(Long id, Employees employee);
 
-    void deleteEmployee(Long id);
+    void softDeleteEmployee(Long id);
 }
