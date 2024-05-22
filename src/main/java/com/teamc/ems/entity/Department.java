@@ -20,7 +20,7 @@ public class Department {
     private String department;
 
     @OneToMany(mappedBy = "department")
-    private Set<User> users;
+    private Set<EMPUser> EMPUsers;
 
 
 

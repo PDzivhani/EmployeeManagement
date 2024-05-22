@@ -1,6 +1,6 @@
 package com.teamc.ems.controller;
 
-import com.teamc.ems.entity.User;
+import com.teamc.ems.entity.EMPUser;
 import com.teamc.ems.service.EmployeesImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,23 +17,23 @@ public class EmployeesController {
     private EmployeesImpl employees;
 
     @GetMapping
-    public List<User> getAllEmployees() {
+    public List<EMPUser> getAllEmployees() {
         return employees.getAllEmployees();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> getEmployeeById(@PathVariable Long id) {
-        User employee = employees.getEmployeeById(id);
+    public ResponseEntity<EMPUser> getEmployeeById(@PathVariable Long id) {
+        EMPUser employee = employees.getEmployeeById(id);
         return employee != null ? ResponseEntity.ok(employee) : ResponseEntity.notFound().build();
     }
 
     @PostMapping
-    public ResponseEntity<User> createEmployee(@RequestBody User employee) {
+    public ResponseEntity<EMPUser> createEmployee(@RequestBody EMPUser employee) {
         return ResponseEntity.ok(employees.createEmployee(employee));
     }
 
     @PutMapping("/{id}")
-    public void updateEmployee(@PathVariable Long id, @RequestBody User employee) {
+    public void updateEmployee(@PathVariable Long id, @RequestBody EMPUser employee) {
         this.employees.updateEmployee(id, employee);
 //        Employees updatedEmployee = employees.updateEmployee(id, employee);
 //        return updatedEmployee != null ? ResponseEntity.ok(updatedEmployee) : ResponseEntity.notFound().build();

@@ -23,7 +23,7 @@ public class Position {
     private double salary;
 
     @OneToMany(mappedBy = "position")
-    private Set<User> users;
+    private Set<EMPUser> EMPUsers;
 
 
 }
