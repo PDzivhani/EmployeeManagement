@@ -16,34 +16,15 @@ public class EmployeesImpl implements EmployeesInit{
     @Autowired
     private EmployeeRepo employeeRepo;
 
-   @Override
+    @Override
     public List<EMPUser> getAllEmployees() {
-       return employeeRepo.findByDeletedFalse();
-    }
-
-    public void softDeleteEmployee(Long id) {
-       Optional<EMPUser> userOptional = employeeRepo.findById(id);
-       if(userOptional.isPresent()) {
-           EMPUser EMPUser = userOptional.get();
-           EMPUser.setDeleted(true);
-           employeeRepo.save(EMPUser);
-       } else {
-           throw new EntityNotFoundException("not found");
-       }
+        return employeeRepo.findByDeletedFalse();
     }
 
     @Override
     public EMPUser getEmployeeById(Long id) {
-        Optional<EMPUser> optional = employeeRepo.findById(id);
-        EMPUser EMPUser;
-        if(optional.isPresent()){
-            EMPUser = optional.get();
-        }
-        else {
-            throw new RuntimeException("Employee with id" + id + "is not found");
-
-        }
-        return EMPUser;
+        return employeeRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Employee with id " + id + " is not found"));
     }
 
     @Override
@@ -53,33 +34,37 @@ public class EmployeesImpl implements EmployeesInit{
 
     @Override
     public void updateEmployee(Long id, EMPUser employee) {
-       EMPUser EMPUserFromDb = employeeRepo.findById(id).get();
-       if(employeeRepo.existsById(id)){
-           employee.setId(id);
-           EMPUserFromDb.setFirstName(employee.getFirstName());
-           EMPUserFromDb.setDateOfBirth(employee.getDateOfBirth());
-           EMPUserFromDb.setEmail(employee.getEmail());
-           EMPUserFromDb.setGender(employee.getGender());
-           EMPUserFromDb.setAddress(employee.getAddress());
-           EMPUserFromDb.setIdNumber(employee.getIdNumber());
-           EMPUserFromDb.setLastName(employee.getLastName());
-           EMPUserFromDb.setStartDate(employee.getStartDate());
-           EMPUserFromDb.setPhoneNumber(employee.getPhoneNumber());
-           EMPUserFromDb.setPassword(employee.getPassword());
-           EMPUserFromDb.setImage(employee.getImage());
-           EMPUserFromDb.setEmergencyContactRelationship(employee.getEmergencyContactRelationship());
-           EMPUserFromDb.setEmergencyContactNo(employee.getEmergencyContactNo());
-           EMPUserFromDb.setEmergencyContactName(employee.getEmergencyContactName());
-           EMPUserFromDb.setDepartment(employee.getDepartment());
-           EMPUserFromDb.setPosition(employee.getPosition());
-           employeeRepo.save(EMPUserFromDb);
-       }
+        EMPUser employeeFromDb = employeeRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Employee with id " + id + " is not found"));
+        employee.setId(id);
+        employeeFromDb.setFirstName(employee.getFirstName());
+        employeeFromDb.setLastName(employee.getLastName());
+        employeeFromDb.setDateOfBirth(employee.getDateOfBirth());
+        employeeFromDb.setEmail(employee.getEmail());
+        employeeFromDb.setGender(employee.getGender());
+        employeeFromDb.setAddress(employee.getAddress());
+        employeeFromDb.setIdNumber(employee.getIdNumber());
+        employeeFromDb.setStartDate(employee.getStartDate());
+        employeeFromDb.setPhoneNumber(employee.getPhoneNumber());
+        employeeFromDb.setPassword(employee.getPassword());
+        employeeFromDb.setImage(employee.getImage());
+        employeeFromDb.setEmergencyContactName(employee.getEmergencyContactName());
+        employeeFromDb.setEmergencyContactRelationship(employee.getEmergencyContactRelationship());
+        employeeFromDb.setEmergencyContactNo(employee.getEmergencyContactNo());
+        employeeFromDb.setRole(employee.getRole());
+        employeeRepo.save(employeeFromDb);
+    }
+    @Override
+    public void softDeleteEmployee(Long id) {
+        EMPUser employee = employeeRepo.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Employee not found"));
+        employee.setDeleted(true);
+        employeeRepo.save(employee);
     }
 
     @Override
     public void saveEmployees(EMPUser EMPUser) {
-        //use data from another class when you don't have anything to return
-       this.employeeRepo.save(EMPUser);
+        employeeRepo.save(EMPUser);
     }
 
 }

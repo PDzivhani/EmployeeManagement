@@ -12,6 +12,7 @@ import java.util.Optional;
 public class PositionImpl implements PositionInit{
     @Autowired
     private PositionRepo positionRepo;
+
     @Override
     public List<Position> getAllPositions() {
         return positionRepo.findByDeletedFalse();
@@ -19,15 +20,8 @@ public class PositionImpl implements PositionInit{
 
     @Override
     public Position getPositionById(Long id) {
-        Optional<Position> optional = positionRepo.findById(id);
-        Position position;
-        if(optional.isPresent()){
-            position = optional.get();
-        }
-        else {
-            throw new RuntimeException("Position with id" + id + "is not found");
-        }
-        return position;
+        return positionRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Position with id " + id + " is not found"));
     }
 
     @Override
@@ -36,30 +30,25 @@ public class PositionImpl implements PositionInit{
     }
 
     @Override
-    public void savePositions(Position position) {
-         this.positionRepo.save(position);
-    }
-
-    @Override
     public void updatePosition(Long id, Position position) {
-        Position positionDb = positionRepo.findById(id).get();
-        if(positionRepo.existsById(id)){
-            position.setPositionId(id);
-            positionDb.setPositionName(position.getPositionName());
-//            departmentDb.setEMPUsers(department.getEMPUsers());
-            positionRepo.save(positionDb);
-        }
+        Position positionFromDb = positionRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Position with id " + id + " is not found"));
+        position.setPositionId(id);
+        positionFromDb.setPositionName(position.getPositionName());
+        positionFromDb.setSalary(position.getSalary());
+        positionRepo.save(positionFromDb);
     }
 
     @Override
     public void softDeletePosition(Long id) {
-        Optional <Position> PositionOptional = positionRepo.findById(id);
-        if(PositionOptional.isPresent()) {
-            Position position = PositionOptional.get();
-            position.setDeleted(true);
-            positionRepo.save(position);
-        } else {
-            throw new EntityNotFoundException("not found");
-        }
+        Position position = positionRepo.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Position not found"));
+        position.setDeleted(true);
+        positionRepo.save(position);
+    }
+
+    @Override
+    public void savePositions(Position position) {
+        positionRepo.save(position);
     }
 }

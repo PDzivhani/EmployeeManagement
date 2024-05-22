@@ -12,24 +12,18 @@ import java.util.Optional;
 
 @Service
 public class DepartmentImpl implements DepartmentInit{
-  @Autowired
-  private DepartmentRepo departmentRepo;
-  @Override
-  public List<Department> getAllDepartments() {
+    @Autowired
+    private DepartmentRepo departmentRepo;
+
+    @Override
+    public List<Department> getAllDepartments() {
         return departmentRepo.findByDeletedFalse();
     }
 
     @Override
     public Department getDepartmentById(Long id) {
-        Optional<Department> optional = departmentRepo.findById(id);
-        Department department;
-        if(optional.isPresent()){
-            department = optional.get();
-        }
-        else {
-            throw new RuntimeException("Department with id" + id + "is not found");
-        }
-        return department;
+        return departmentRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Department with id " + id + " is not found"));
     }
 
     @Override
@@ -39,31 +33,24 @@ public class DepartmentImpl implements DepartmentInit{
 
     @Override
     public void saveDepartments(Department department) {
-        //use data from another class when you don't have anything to return
-        this.departmentRepo.save(department);
+        departmentRepo.save(department);
     }
 
     @Override
     public void updateDepartment(Long id, Department department) {
-        Department departmentDb = departmentRepo.findById(id).get();
-        if(departmentRepo.existsById(id)){
-            department.setDepartmentId(id);
-            departmentDb.setDepartmentName(department.getDepartmentName());
-//            departmentDb.setEMPUsers(department.getEMPUsers());
-            departmentRepo.save(departmentDb);
-        }
+        Department departmentDb = departmentRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Department with id " + id + " is not found"));
+        department.setDepartmentId(id);
+        departmentDb.setDepartmentName(department.getDepartmentName());
+        departmentRepo.save(departmentDb);
     }
 
     @Override
     public void softDeleteDepartment(Long id) {
-        Optional <Department> DeptOptional = departmentRepo.findById(id);
-        if(DeptOptional.isPresent()) {
-            Department department = DeptOptional.get();
-            department.setDeleted(true);
-            departmentRepo.save(department);
-        } else {
-            throw new EntityNotFoundException("not found");
-        }
+        Department department = departmentRepo.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Department not found"));
+        department.setDeleted(true);
+        departmentRepo.save(department);
     }
 
 }
