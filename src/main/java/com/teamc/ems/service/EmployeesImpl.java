@@ -1,6 +1,8 @@
 package com.teamc.ems.service;
 
-import com.teamc.ems.entity.Employees;
+import com.teamc.ems.entity.User;
+import com.teamc.ems.entity.Department;
+import com.teamc.ems.entity.Position;
 import com.teamc.ems.repository.EmployeeRepo;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,74 +19,68 @@ public class EmployeesImpl implements EmployeesInit{
     private EmployeeRepo employeeRepo;
 
    @Override
-    public List<Employees> getAllEmployees() {
+    public List<User> getAllEmployees() {
        return employeeRepo.findByDeletedFalse();
     }
 
     public void softDeleteEmployee(Long id) {
-       Optional<Employees> userOptional = employeeRepo.findById(id);
+       Optional<User> userOptional = employeeRepo.findById(id);
        if(userOptional.isPresent()) {
-           Employees employees = userOptional.get();
-           employees.setDeleted(true);
-           employeeRepo.save(employees);
+           User user = userOptional.get();
+           user.setDeleted(true);
+           employeeRepo.save(user);
        } else {
            throw new EntityNotFoundException("not found");
        }
     }
 
     @Override
-    public Employees getEmployeeById(Long id) {
-        Optional<Employees> optional = employeeRepo.findById(id);
-        Employees employees;
+    public User getEmployeeById(Long id) {
+        Optional<User> optional = employeeRepo.findById(id);
+        User user;
         if(optional.isPresent()){
-            employees = optional.get();
+            user = optional.get();
         }
         else {
             throw new RuntimeException("Employee with id" + id + "is not found");
 
         }
-        return employees;
+        return user;
     }
 
     @Override
-    public Employees createEmployee(Employees employee) {
+    public User createEmployee(User employee) {
         return employeeRepo.save(employee);
     }
 
     @Override
-    public void updateEmployee(Long id, Employees employee) {
-       Employees employeesFromDb = employeeRepo.findById(id).get();
+    public void updateEmployee(Long id, User employee) {
+       User userFromDb = employeeRepo.findById(id).get();
        if(employeeRepo.existsById(id)){
            employee.setId(id);
-           employeesFromDb.setName(employee.getName());
-           employeesFromDb.setBirthday(employee.getBirthday());
-           employeesFromDb.setEmail(employee.getEmail());
-           employeesFromDb.setDepartment(employee.getDepartment());
-           employeesFromDb.setGender(employee.getGender());
-           employeesFromDb.setAddress(employee.getAddress());
-           employeesFromDb.setIdNo(employee.getIdNo());
-           employeesFromDb.setWorkRole(employee.getWorkRole());
-           employeesFromDb.setSurname(employee.getSurname());
-           employeesFromDb.setStartDate(employee.getStartDate());
-           employeesFromDb.setPhoneNumber(employee.getPhoneNumber());
-           employeesFromDb.setPassword(employee.getPassword());
-           employeesFromDb.setImage(employee.getImage());
-           employeesFromDb.setEmergencyContactRelationship(employee.getEmergencyContactRelationship());
-           employeesFromDb.setEmergencyContactNo(employee.getEmergencyContactNo());
-           employeesFromDb.setEmergencyContactName(employee.getEmergencyContactName());
-           employeeRepo.save(employeesFromDb);
+           userFromDb.setFirstName(employee.getFirstName());
+           userFromDb.setDateOfBirth(employee.getDateOfBirth());
+           userFromDb.setEmail(employee.getEmail());
+           userFromDb.setGender(employee.getGender());
+           userFromDb.setAddress(employee.getAddress());
+           userFromDb.setIdNumber(employee.getIdNumber());
+           userFromDb.setLastName(employee.getLastName());
+           userFromDb.setStartDate(employee.getStartDate());
+           userFromDb.setPhoneNumber(employee.getPhoneNumber());
+           userFromDb.setPassword(employee.getPassword());
+           userFromDb.setImage(employee.getImage());
+           userFromDb.setEmergencyContactRelationship(employee.getEmergencyContactRelationship());
+           userFromDb.setEmergencyContactNo(employee.getEmergencyContactNo());
+           userFromDb.setEmergencyContactName(employee.getEmergencyContactName());
+           employeeRepo.save(userFromDb);
        }
     }
 
     @Override
-    public void saveEmployees(Employees employees) {
+    public void saveEmployees(User user) {
         //use data from another class when you don't have anything to return
-       this.employeeRepo.save(employees);
+       this.employeeRepo.save(user);
     }
 
-//    @Override
-//    public void deleteEmployee(Long id) {
-//        employeeRepo.deleteById(id);
-//    }
 }
 

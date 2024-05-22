@@ -1,20 +1,20 @@
 package com.teamc.ems.service;
 
-import com.teamc.ems.entity.Employees;
+import com.teamc.ems.entity.User;
 
 import java.util.List;
 
 
 public interface EmployeesInit {
-    List<Employees> getAllEmployees();
+    List<User> getAllEmployees();
 
-    Employees getEmployeeById(Long id);
+    User getEmployeeById(Long id);
 
-    Employees createEmployee(Employees employee);
+    User createEmployee(User employee);
 
-    void saveEmployees(Employees employees);
+    void saveEmployees(User user);
 
-    void updateEmployee(Long id, Employees employee);
+    void updateEmployee(Long id, User employee);
 
     void softDeleteEmployee(Long id);
 }

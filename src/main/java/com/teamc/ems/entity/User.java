@@ -9,38 +9,31 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
-import org.springframework.data.annotation.CreatedDate;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import java.time.LocalDate;
 import java.util.Date;
+import java.util.Set;
 
 @Getter
 @Setter
 @Entity
-public class Employees {
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NonNull
-    private String name;
+    private String firstName;
 
     @NonNull
-    private String surname;
+    private String lastName;
 
     @DateTimeFormat(pattern = "dd-MM-yyyy")
-    private Date birthday;
+    private Date dateOfBirth;
 
     @NonNull
-    private String idNo;
-
-    @NonNull
-    private String workRole;
-
-    @NonNull
-    private String department;
+    private String idNumber;
 
     @DateTimeFormat(pattern = "dd-MM-yyyy")
     private Date startDate;
@@ -74,12 +67,14 @@ public class Employees {
 
     @Column(name = "is_deleted")
     private boolean deleted = false;
+
     @NonNull
     private Role role;
 
+    @ManyToOne
+    private Position position;
 
+    @ManyToOne
+    private Department department;
 
-    public void setDeleted(boolean deleted) {
-        this.deleted = deleted;
-    }
 }
