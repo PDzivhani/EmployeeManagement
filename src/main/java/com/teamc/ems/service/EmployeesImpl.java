@@ -70,6 +70,8 @@ public class EmployeesImpl implements EmployeesInit{
            EMPUserFromDb.setEmergencyContactRelationship(employee.getEmergencyContactRelationship());
            EMPUserFromDb.setEmergencyContactNo(employee.getEmergencyContactNo());
            EMPUserFromDb.setEmergencyContactName(employee.getEmergencyContactName());
+           EMPUserFromDb.setDepartment(employee.getDepartment());
+           EMPUserFromDb.setPosition(employee.getPosition());
            employeeRepo.save(EMPUserFromDb);
        }
     }

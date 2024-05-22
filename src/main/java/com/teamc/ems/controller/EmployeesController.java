@@ -35,8 +35,6 @@ public class EmployeesController {
     @PutMapping("/{id}")
     public void updateEmployee(@PathVariable Long id, @RequestBody EMPUser employee) {
         this.employees.updateEmployee(id, employee);
-//        Employees updatedEmployee = employees.updateEmployee(id, employee);
-//        return updatedEmployee != null ? ResponseEntity.ok(updatedEmployee) : ResponseEntity.notFound().build();
     }
 
     @DeleteMapping("/{id}")

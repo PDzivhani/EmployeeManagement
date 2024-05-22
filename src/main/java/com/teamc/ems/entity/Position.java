@@ -24,6 +24,6 @@ public class Position {
 
     @OneToMany(mappedBy = "position")
     private Set<EMPUser> EMPUsers;
-
-
+    @Column(name = "is_deleted")
+    private boolean deleted = false;
 }

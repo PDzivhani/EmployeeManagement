@@ -17,11 +17,12 @@ public class Department {
     private Long departmentId;
 
     @NonNull
-    private String department;
+    private String DepartmentName;
 
     @OneToMany(mappedBy = "department")
     private Set<EMPUser> EMPUsers;
-
+    @Column(name = "is_deleted")
+    private boolean deleted = false;
 
 
 }
