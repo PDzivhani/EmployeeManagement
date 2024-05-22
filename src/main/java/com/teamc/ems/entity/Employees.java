@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
@@ -71,9 +72,14 @@ public class Employees {
     @NonNull
     private String emergencyContactNo;
 
+    @Column(name = "is_deleted")
+    private boolean deleted = false;
     @NonNull
     private Role role;
 
 
 
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
 }

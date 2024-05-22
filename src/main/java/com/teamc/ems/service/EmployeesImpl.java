@@ -2,6 +2,7 @@ package com.teamc.ems.service;
 
 import com.teamc.ems.entity.Employees;
 import com.teamc.ems.repository.EmployeeRepo;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +18,18 @@ public class EmployeesImpl implements EmployeesInit{
 
    @Override
     public List<Employees> getAllEmployees() {
-       return employeeRepo.findAll();
+       return employeeRepo.findByDeletedFalse();
+    }
+
+    public void softDeleteEmployee(Long id) {
+       Optional<Employees> userOptional = employeeRepo.findById(id);
+       if(userOptional.isPresent()) {
+           Employees employees = userOptional.get();
+           employees.setDeleted(true);
+           employeeRepo.save(employees);
+       } else {
+           throw new EntityNotFoundException("not found");
+       }
     }
 
     @Override
@@ -70,9 +82,9 @@ public class EmployeesImpl implements EmployeesInit{
        this.employeeRepo.save(employees);
     }
 
-    @Override
-    public void deleteEmployee(Long id) {
-        employeeRepo.deleteById(id);
-    }
+//    @Override
+//    public void deleteEmployee(Long id) {
+//        employeeRepo.deleteById(id);
+//    }
 }
 
