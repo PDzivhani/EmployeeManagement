@@ -42,7 +42,7 @@ public class EmployeesController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteEmployee(@PathVariable Long id) {
-        employees.deleteEmployee(id);
+        employees.softDeleteEmployee(id);
         return ResponseEntity.ok().build();
     }
 }
