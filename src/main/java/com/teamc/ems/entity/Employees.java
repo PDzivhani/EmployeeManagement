@@ -1,5 +1,6 @@
 package com.teamc.ems.entity;
 
+import com.teamc.ems.user.Role;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -69,6 +70,9 @@ public class Employees {
 
     @NonNull
     private String emergencyContactNo;
+
+    @NonNull
+    private Role role;
 
 
 
