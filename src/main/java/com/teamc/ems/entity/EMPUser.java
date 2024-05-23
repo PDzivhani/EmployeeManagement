@@ -1,6 +1,6 @@
 package com.teamc.ems.entity;
 
-import com.teamc.ems.user.Role;
+//import com.teamc.ems.user.Role;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -87,7 +87,7 @@ public class EMPUser {
 
     @NonNull
     @Enumerated(EnumType.STRING)
-    private Role role;
+    //private Role role;
 
     @ManyToMany
     @JoinTable(

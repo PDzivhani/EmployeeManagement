@@ -51,7 +51,7 @@ public class EmployeesImpl implements EmployeesInit{
         employeeFromDb.setEmergencyContactName(employee.getEmergencyContactName());
         employeeFromDb.setEmergencyContactRelationship(employee.getEmergencyContactRelationship());
         employeeFromDb.setEmergencyContactNo(employee.getEmergencyContactNo());
-        employeeFromDb.setRole(employee.getRole());
+//        employeeFromDb.setRole(employee.getRole());
         employeeRepo.save(employeeFromDb);
     }
     @Override
