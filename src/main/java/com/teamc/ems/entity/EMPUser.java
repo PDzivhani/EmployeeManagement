@@ -9,7 +9,6 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
-import org.intellij.lang.annotations.Pattern;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
