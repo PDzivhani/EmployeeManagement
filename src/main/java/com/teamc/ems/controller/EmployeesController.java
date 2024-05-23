@@ -1,8 +1,6 @@
 package com.teamc.ems.controller;
 
 import com.teamc.ems.entity.EMPUser;
-import com.teamc.ems.exceptionHandling.CustomException;
-import com.teamc.ems.repository.EmployeeRepo;
 import com.teamc.ems.service.EmployeesImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -26,13 +24,8 @@ public class EmployeesController {
     @GetMapping("/{id}")
     public ResponseEntity<EMPUser> getEmployeeById(@PathVariable Long id) {
         EMPUser employee = employees.getEmployeeById(id);
-        if (id.equals(id)){
-            throw new CustomException("USER_NOT_FOUND", "User with ID " + id + " not found");
-        } else {
 
-        }
-
-        //return employee != null ? ResponseEntity.ok(employee) : ResponseEntity.notFound().build();
+        return employee != null ? ResponseEntity.ok(employee) : ResponseEntity.notFound().build();
     }
 
     @PostMapping
