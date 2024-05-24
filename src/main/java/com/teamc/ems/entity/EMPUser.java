@@ -76,4 +76,6 @@ public class EMPUser {
     @ManyToOne
     private Department department;
 
+    public void setProfilePicture(byte[] bytes) {
+    }
 }

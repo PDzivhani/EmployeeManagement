@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
-
 @Service
 public class EmployeesImpl implements EmployeesInit{
 
@@ -80,5 +79,11 @@ public class EmployeesImpl implements EmployeesInit{
        this.employeeRepo.save(EMPUser);
     }
 
+
+    public void setProfilePicture(byte[] bytes) {
+    }
+
+    public void saveEmployee(EmployeesImpl employee) {
+    }
 }
 

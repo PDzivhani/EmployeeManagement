@@ -4,8 +4,11 @@ import com.teamc.ems.entity.EMPUser;
 import com.teamc.ems.service.EmployeesImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 
@@ -43,5 +46,22 @@ public class EmployeesController {
     public ResponseEntity<Void> deleteEmployee(@PathVariable Long id) {
         employees.softDeleteEmployee(id);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/profile/{id}")
+    public String getProfile(@PathVariable Long id, Model model) {
+
+        EMPUser employee = employees.getEmployeeById(id);
+        model.addAttribute("employee", employee);
+        return "profile";
+    }
+
+    @PostMapping("/uploadProfilePicture/{id}")
+    public String uploadProfilePicture(@PathVariable Long id, @RequestParam ("image")MultipartFile image, Model model) throws IOException {
+        EMPUser employee = employees.getEmployeeById(id);
+        employee.setProfilePicture(image.getBytes());
+        employees.saveEmployee(employees);
+        model.addAttribute("employee", employee);
+        return "Profile";
     }
 }
