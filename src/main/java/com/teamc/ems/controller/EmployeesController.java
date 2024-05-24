@@ -24,13 +24,17 @@ public class EmployeesController {
     @GetMapping("/{id}")
     public ResponseEntity<EMPUser> getEmployeeById(@PathVariable Long id) {
         EMPUser employee = employees.getEmployeeById(id);
-
         return employee != null ? ResponseEntity.ok(employee) : ResponseEntity.notFound().build();
     }
 
     @PostMapping
     public ResponseEntity<EMPUser> createEmployee(@RequestBody EMPUser employee) {
         return ResponseEntity.ok(employees.createEmployee(employee));
+    }
+
+    @PostMapping
+    public void saveEmployee(@RequestBody EMPUser empUser){
+        this.employees.saveEmployee(empUser);
     }
 
     @PutMapping("/{id}")

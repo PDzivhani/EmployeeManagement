@@ -12,7 +12,7 @@ public interface EmployeesInit {
 
     EMPUser createEmployee(EMPUser employee);
 
-    void saveEmployees(EMPUser EMPUser);
+    void saveEmployee(EMPUser EMPUser);
 
     void updateEmployee(Long id, EMPUser employee);
 

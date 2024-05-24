@@ -19,12 +19,14 @@ public class SecurityConfiguration {
     private final JwtAuthenticationFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;
 
+
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/v1/auth/**","/api/v1/auth/register","/api/v1/auth/authenticate", "api/v1/employees")
+                        .requestMatchers("/api/v1/auth/**","/api/v1/auth/register","/api/v1/auth/authenticate", "api/v1/employees","api/v1/employees/**")
                         .permitAll()
                         .anyRequest()
                         .authenticated()
