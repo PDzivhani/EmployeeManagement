@@ -2,13 +2,15 @@ package com.teamc.ems.controller;
 
 import com.teamc.ems.entity.EMPUser;
 import com.teamc.ems.service.EmployeesImpl;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-
+@Validated
 @RestController
 @RequestMapping("/api/v1/employees")
 public class EmployeesController {
@@ -28,12 +30,12 @@ public class EmployeesController {
     }
 
     @PostMapping
-    public ResponseEntity<EMPUser> createEmployee(@RequestBody EMPUser employee) {
+    public ResponseEntity<EMPUser> createEmployee( @Valid @RequestBody EMPUser employee) {
         return ResponseEntity.ok(employees.createEmployee(employee));
     }
 
     @PutMapping("/{id}")
-    public void updateEmployee(@PathVariable Long id, @RequestBody EMPUser employee) {
+    public void updateEmployee(@PathVariable Long id,@Valid @RequestBody EMPUser employee) {
         this.employees.updateEmployee(id, employee);
 //        Employees updatedEmployee = employees.updateEmployee(id, employee);
 //        return updatedEmployee != null ? ResponseEntity.ok(updatedEmployee) : ResponseEntity.notFound().build();

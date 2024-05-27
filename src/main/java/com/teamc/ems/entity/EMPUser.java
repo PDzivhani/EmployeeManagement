@@ -6,11 +6,20 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.validation.annotation.Validated;
 
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 import java.util.Date;
 
 @Getter
@@ -22,58 +31,86 @@ public class EMPUser {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NonNull
+@Valid
+
+
+
+    @NotBlank
+    //@NotEmpty(message= "name is required")
     private String firstName;
 
-    @NonNull
+    @NotBlank
+    //@NotEmpty(message= "lastname is required")
     private String lastName;
 
     @DateTimeFormat(pattern = "dd-MM-yyyy")
+    //@NotEmpty(message= "date of birth is required")
     private Date dateOfBirth;
 
-    @NonNull
-    private String idNumber;
+    @NotBlank
+    @Min(value = 13)
+    @Digits(integer = 13,fraction = 0 )
+    //@NotEmpty(message= "id number is required")
+    private Integer idNumber;
 
     @DateTimeFormat(pattern = "dd-MM-yyyy")
+    //@NotEmpty(message= "start date is required")
     private Date startDate;
 
-    @NonNull
+    @NotBlank
+    //@NotEmpty(message= "address is required")
     private String address;
 
-    @NonNull
-    private String phoneNumber;
+    @NotBlank
+    @Digits(integer = 10,fraction = 0 )
+    //@NotEmpty(message= "phone number is required")
+    private Integer phoneNumber;
 
-    @NonNull
+    @NotBlank
     private String image;
 
-    @NonNull
+    @NotBlank
+    //@NotEmpty(message= "gender is required")
     private String gender;
 
-    @NonNull
+    @NotBlank
+    @Size(min =8,max =16)
+    //@NotEmpty(message= "password is required")
     private String password;
 
-    @NonNull
+
+
+    @NotBlank
+    @Email
+    //@NotEmpty(message= "email is required")
     private String email;
 
-    @NonNull
+    @NotBlank
+    //@NotEmpty(message= "emergency contact name is required")
     private String emergencyContactName;
 
-    @NonNull
+    @NotBlank
+    //@NotEmpty(message= "emergency contact relationship is required")
     private String emergencyContactRelationship;
 
-    @NonNull
-    private String emergencyContactNo;
+    @NotBlank
+    @Digits(integer = 10,fraction = 0 )
+    //@NotEmpty(message= "emergency contact number is required")
+    private Integer emergencyContactNo;
 
     @Column(name = "is_deleted")
     private boolean deleted = false;
 
-    @NonNull
+    @NotBlank
+    //@NotEmpty(message= "role is required")
     private Role role;
 
     @ManyToOne
+    //@NotEmpty(message= "position is required")
     private Position position;
 
     @ManyToOne
+    //@NotEmpty(message= "department is required")
     private Department department;
 
 }
