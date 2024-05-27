@@ -21,6 +21,7 @@ public class Department {
 
     @OneToMany(mappedBy = "department")
     private Set<EMPUser> EMPUsers;
+
     @Column(name = "is_deleted")
     private boolean deleted = false;
 

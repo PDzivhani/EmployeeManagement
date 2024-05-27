@@ -27,6 +27,17 @@ public class ControllerExceptionHandler {
         return customErrorResponse;
     }
 
+    @ExceptionHandler(value = {ResourceFoundException.class})
+    @ResponseStatus(value = HttpStatus.OK)
+    public CustomSuccessResponse successResponse(@NonNull ResourceFoundException resourceFoundException, @NonNull WebRequest webRequest){
+        CustomSuccessResponse customSuccessResponse = new CustomSuccessResponse(
+                HttpStatus.OK.value(),
+                resourceFoundException.getMessage(),
+                webRequest.getDescription(false)
+        );
+        return customSuccessResponse;
+    }
+
     @ExceptionHandler(Exception.class)
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
     public CustomErrorResponse globalExceptionHandler(@NonNull  Exception exception,@NonNull WebRequest webRequest){
@@ -37,5 +48,7 @@ public class ControllerExceptionHandler {
         );
         return message;
     }
+
+
 
 }

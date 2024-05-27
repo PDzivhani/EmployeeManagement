@@ -11,7 +11,7 @@ public interface PositionInit {
 
     Position createPosition(Position position);
 
-    void savePositions(Position position);
+    void savePosition(Position position);
 
     void updatePosition(Long id, Position position);
 

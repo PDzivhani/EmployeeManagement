@@ -2,6 +2,8 @@ package com.teamc.ems.service;
 
 import com.teamc.ems.entity.Department;
 import com.teamc.ems.entity.EMPUser;
+import com.teamc.ems.exceptionHandling.ResourceFoundException;
+import com.teamc.ems.exceptionHandling.ResourceNotFoundException;
 import com.teamc.ems.repository.DepartmentRepo;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +18,8 @@ public class DepartmentImpl implements DepartmentInit{
   private DepartmentRepo departmentRepo;
   @Override
   public List<Department> getAllDepartments() {
-        return departmentRepo.findByDeletedFalse();
+
+      return departmentRepo.findByDeletedFalse();
     }
 
     @Override
@@ -27,20 +30,32 @@ public class DepartmentImpl implements DepartmentInit{
             department = optional.get();
         }
         else {
-            throw new RuntimeException("Department with id" + id + "is not found");
+            throw new ResourceNotFoundException("Department with id" + id + "is not found");
         }
         return department;
     }
 
     @Override
     public Department createDepartment(Department department) {
-        return departmentRepo.save(department);
+        try{
+            return departmentRepo.save(department);
+            //throw  new ResourceFoundException("Department successfully created.");
+        }
+        catch (Exception e){
+            throw new ResourceNotFoundException("Unable to create department.");
+        }
     }
 
     @Override
     public void saveDepartments(Department department) {
         //use data from another class when you don't have anything to return
-        this.departmentRepo.save(department);
+        try{
+            this.departmentRepo.save(department);
+            throw new ResourceFoundException("Department saved");
+        }
+        catch (Exception e){
+            throw new ResourceNotFoundException("Cannot save department");
+        }
     }
 
     @Override
@@ -51,6 +66,11 @@ public class DepartmentImpl implements DepartmentInit{
             departmentDb.setDepartmentName(department.getDepartmentName());
 //            departmentDb.setEMPUsers(department.getEMPUsers());
             departmentRepo.save(departmentDb);
+            throw new ResourceFoundException("Department with id " + id + " successfully updated");
+        }
+        else {
+            // implement custom exception if position does not exist
+            throw new ResourceNotFoundException("Cannot update. Department with id" + id + "does not exist");
         }
     }
 
@@ -61,8 +81,10 @@ public class DepartmentImpl implements DepartmentInit{
             Department department = DeptOptional.get();
             department.setDeleted(true);
             departmentRepo.save(department);
+            // custom success message implemented
+            throw  new ResourceFoundException("Department with id " + id + " successfully deleted");
         } else {
-            throw new EntityNotFoundException("not found");
+            throw new ResourceNotFoundException("Department with id " + id + " does not exist");
         }
     }
 

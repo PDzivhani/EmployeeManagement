@@ -1,5 +1,8 @@
 package com.teamc.ems.service;
 
+import com.teamc.ems.exceptionHandling.CustomErrorResponse;
+import com.teamc.ems.exceptionHandling.CustomSuccessResponse;
+import com.teamc.ems.exceptionHandling.ResourceFoundException;
 import com.teamc.ems.exceptionHandling.ResourceNotFoundException;
 import com.teamc.ems.entity.EMPUser;
 import com.teamc.ems.repository.EmployeeRepo;
@@ -32,8 +35,10 @@ public class EmployeesImpl implements EmployeesInit{
            EMPUser EMPUser = userOptional.get();
            EMPUser.setDeleted(true);
            employeeRepo.save(EMPUser);
+           // custom success message implemented
+            throw  new ResourceFoundException("Employee with id " + id + " successfully deleted");
        } else {
-           throw new EntityNotFoundException("not found");
+           throw new ResourceNotFoundException("Employee with id " + id + " does not exist");
        }
     }
 
@@ -46,7 +51,7 @@ public class EmployeesImpl implements EmployeesInit{
         }
         else {
             // implement our custom exception on getting an employee by id
-            throw new ResourceNotFoundException("Employee with id " + id + " is not found");
+            throw new ResourceNotFoundException("Employee with id " + id + " is not found.");
         }
         return empUser;
     }
@@ -55,6 +60,7 @@ public class EmployeesImpl implements EmployeesInit{
     public EMPUser createEmployee(EMPUser employee) {
        try {
            return employeeRepo.save(employee);
+           //throw  new ResourceFoundException("Employee successfully created.");
        } catch (Exception e){
            throw new ResourceNotFoundException("Unable to create employee.");
        }
@@ -83,6 +89,7 @@ public class EmployeesImpl implements EmployeesInit{
            EMPUserFromDb.setDepartment(employee.getDepartment());
            EMPUserFromDb.setPosition(employee.getPosition());
            employeeRepo.save(EMPUserFromDb);
+           throw new ResourceFoundException("Employee details with id " + id + " successfully updated");
        }
        else {
            // implement custom exception if employee does not exist
@@ -94,6 +101,7 @@ public class EmployeesImpl implements EmployeesInit{
     public void saveEmployee(EMPUser EMPUser) {
        try{
            this.employeeRepo.save(EMPUser);
+           throw new ResourceFoundException("Employee saved");
        }
        catch (Exception e){
            throw new ResourceNotFoundException("Cannot Save Employee");
