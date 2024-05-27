@@ -27,7 +27,7 @@ public class EmployeesController {
         return employee != null ? ResponseEntity.ok(employee) : ResponseEntity.notFound().build();
     }
 
-    @PostMapping
+    @PostMapping("/create")
     public ResponseEntity<EMPUser> createEmployee(@RequestBody EMPUser employee) {
         return ResponseEntity.ok(employees.createEmployee(employee));
     }
