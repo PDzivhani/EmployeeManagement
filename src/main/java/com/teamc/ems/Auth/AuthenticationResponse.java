@@ -1,5 +1,6 @@
 package com.teamc.ems.Auth;
 
+import com.teamc.ems.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,6 +11,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AuthenticationResponse {
-
+    private User user;
     private String token;
 }
