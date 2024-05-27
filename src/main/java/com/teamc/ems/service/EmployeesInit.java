@@ -5,10 +5,11 @@ import java.util.List;
 
 public interface EmployeesInit {
     List<EMPUser> getAllEmployees();
+    List<EMPUser> getDeletedEmployees();
     EMPUser getEmployeeById(Long id);
     EMPUser createEmployee(EMPUser employee);
     void updateEmployee(Long id, EMPUser employee);
     void deleteEmployee(Long id);
-
+    void recoverEmployee(Long id);
     void saveEmployee(EMPUser existingEmployee);
 }

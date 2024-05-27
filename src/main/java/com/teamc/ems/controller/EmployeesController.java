@@ -48,6 +48,32 @@ public class EmployeesController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    @GetMapping("/deleted")
+    public ResponseEntity<List<EMPUser>> getDeletedEmployees() {
+        logger.info("GET /api/employees/deleted called");
+        try {
+            List<EMPUser> employees = employeeService.getDeletedEmployees();
+            return new ResponseEntity<>(employees, HttpStatus.OK);
+        } catch (Exception e) {
+            logger.severe("GET /api/employees/deleted failed: " + e.getMessage());
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PutMapping("/recover/{id}")
+    public ResponseEntity<Void> recoverEmployee(@PathVariable Long id) {
+        logger.info("PUT /api/employees/recover/" + id + " called");
+        try {
+            employeeService.recoverEmployee(id);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (EntityNotFoundException e) {
+            logger.severe("PUT /api/employees/recover/" + id + " not found: " + e.getMessage());
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            logger.severe("PUT /api/employees/recover/" + id + " failed: " + e.getMessage());
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
     @PostMapping
     public ResponseEntity<EMPUser> createEmployee(@RequestBody EMPUser employee) {
@@ -61,20 +87,7 @@ public class EmployeesController {
         }
     }
 
-//    @PutMapping("/{id}")
-//    public ResponseEntity<EMPUser> updateEmployee(@PathVariable Long id, @RequestBody EMPUser employee) {
-//        logger.info("PUT /api/employees/" + id + " called");
-//        try {
-//            employeeService.updateEmployee(id, employee);
-//            return new ResponseEntity<>(employee, HttpStatus.OK);
-//        } catch (EntityNotFoundException e) {
-//            logger.severe("PUT /api/employees/" + id + " not found: " + e.getMessage());
-//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//        } catch (Exception e) {
-//            logger.severe("PUT /api/employees/" + id + " failed: " + e.getMessage());
-//            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-//        }
-//    }
+
 @PutMapping("/{id}")
 public ResponseEntity<EMPUser> updateEmployee(@PathVariable Long id, @RequestBody EMPUser updatedEmployee) {
     try {

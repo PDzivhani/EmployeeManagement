@@ -28,7 +28,10 @@ public class EmployeesImpl implements EmployeesInit {
     public List<EMPUser> getAllEmployees() {
         return employeeRepo.findByDeletedFalse();
     }
-
+    @Override
+    public List<EMPUser> getDeletedEmployees() {
+        return employeeRepo.findByDeletedTrue();
+    }
     @Override
     public EMPUser getEmployeeById(Long id) {
         return employeeRepo.findById(id)
@@ -83,5 +86,11 @@ public class EmployeesImpl implements EmployeesInit {
     public void saveEmployee(EMPUser employee) {
         employeeRepo.save(employee);
     }
-
+    @Override
+    public void recoverEmployee(Long id) {
+        EMPUser employee = employeeRepo.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Employee not found"));
+        employee.setDeleted(false);
+        employeeRepo.save(employee);
+    }
 }
