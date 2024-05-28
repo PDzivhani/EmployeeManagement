@@ -2,10 +2,12 @@ package com.teamc.ems.service;
 
 import com.teamc.ems.entity.Department;
 import com.teamc.ems.entity.EMPUser;
+
 import com.teamc.ems.entity.Position;
 import com.teamc.ems.repository.DepartmentRepo;
 import com.teamc.ems.repository.EmployeeRepo;
 import com.teamc.ems.repository.PositionRepo;
+import com.teamc.ems.user.Role;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,10 +40,10 @@ public class EmployeesImpl implements EmployeesInit {
                 .orElseThrow(() -> new RuntimeException("Employee with id " + id + " is not found"));
     }
 
-    @Override
-    public EMPUser createEmployee(EMPUser employee) {
-        return employeeRepo.save(employee);
-    }
+//    @Override
+//    public EMPUser createEmployee(EMPUser employee) {
+//        return employeeRepo.save(employee);
+//    }
 
     @Override
     public void updateEmployee(Long id, EMPUser employee) {
@@ -95,7 +97,7 @@ public class EmployeesImpl implements EmployeesInit {
     }
     @Override
     public EMPUser createEmployee(EMPUser employee) {
-        employee.setRole(Role.EMPLOYEE);
+        employee.setRole(Role.Employee);
         return employeeRepo.save(employee);
     }
 }
