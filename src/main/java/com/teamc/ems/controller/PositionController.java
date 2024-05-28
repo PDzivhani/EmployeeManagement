@@ -1,50 +1,50 @@
 package com.teamc.ems.controller;
 
-import com.teamc.ems.entity.Department;
 import com.teamc.ems.entity.Position;
-import com.teamc.ems.service.PositionImpl;
+import com.teamc.ems.service.PositionInit;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 @RestController
-@RequestMapping("/api/v1/positions")
+@RequestMapping("/api/positions")
+@CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
 public class PositionController {
+    private static final Logger logger = Logger.getLogger(PositionController.class.getName());
 
     @Autowired
-    private PositionImpl positions;
+    private PositionInit positionService;
 
     @GetMapping
     public List<Position> getAllPositions() {
-        return positions.getAllPositions();
+        return positionService.getAllPositions();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Position> getPositionById(@PathVariable Long id) {
-        Position position = positions.getPositionById(id);
-        return position != null ? ResponseEntity.ok(position) : ResponseEntity.notFound().build();
+        Position position = positionService.getPositionById(id);
+        return new ResponseEntity<>(position, HttpStatus.OK);
     }
 
     @PostMapping("/create")
     public ResponseEntity<Position> createPosition(@RequestBody Position position) {
-        return ResponseEntity.ok(positions.createPosition(position));
-    }
-
-    @PostMapping
-    public void savePosition(@RequestBody Position position){
-        this.positions.savePosition(position);
+        Position newPosition = positionService.createPosition(position);
+        return new ResponseEntity<>(newPosition, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public void updatePosition(@PathVariable Long id, @RequestBody Position position) {
-        this.positions.updatePosition(id, position);
+    public ResponseEntity<Position> updatePosition(@PathVariable Long id, @RequestBody Position position) {
+        positionService.updatePosition(id, position);
+        return new ResponseEntity<>(position, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletePosition(@PathVariable Long id) {
-        positions.softDeletePosition(id);
-        return ResponseEntity.ok().build();
+        positionService.softDeletePosition(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

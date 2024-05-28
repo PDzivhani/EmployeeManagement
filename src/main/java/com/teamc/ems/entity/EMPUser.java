@@ -12,15 +12,18 @@ import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
+import java.util.Set;
 
 @Getter
 @Setter
 @Entity
+@Table(name = "employees")
 public class EMPUser {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
 
     @NonNull
     private String firstName;
@@ -58,6 +61,7 @@ public class EMPUser {
     @NonNull
     private String emergencyContactName;
 
+
     @NonNull
     private String emergencyContactRelationship;
 
@@ -67,13 +71,16 @@ public class EMPUser {
     @Column(name = "is_deleted")
     private boolean deleted = false;
 
-    @NonNull
+    @Enumerated(EnumType.STRING)
     private Role role;
 
     @ManyToOne
-    private Position position;
+    @JoinColumn(name = "department_id", referencedColumnName = "departmentId")
+    private Department department;
 
     @ManyToOne
-    private Department department;
+    @JoinColumn(name = "position_id", referencedColumnName = "positionId")
+    private Position position;
+
 
 }

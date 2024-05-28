@@ -5,11 +5,10 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 
-import java.util.Set;
-
 @Getter
 @Setter
 @Entity
+@Table(name = "departments")
 public class Department {
 
     @Id
@@ -17,10 +16,8 @@ public class Department {
     private Long departmentId;
 
     @NonNull
-    private String DepartmentName;
+    private String departmentName;
 
     @Column(name = "is_deleted")
     private boolean deleted = false;
-
-
 }
