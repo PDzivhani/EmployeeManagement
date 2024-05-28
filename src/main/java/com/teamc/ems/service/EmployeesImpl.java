@@ -43,37 +43,68 @@ public class EmployeesImpl implements EmployeesInit {
         return employeeRepo.save(employee);
     }
 
-    @Override
-    public void updateEmployee(Long id, EMPUser employee) {
-        EMPUser employeeFromDb = employeeRepo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Employee with id " + id + " is not found"));
+//    @Override
+//    public void updateEmployee(Long id, EMPUser employee) {
+//        EMPUser employeeFromDb = employeeRepo.findById(id)
+//                .orElseThrow(() -> new RuntimeException("Employee with id " + id + " is not found"));
+//
+//        Department department = departmentRepo.findById(employee.getDepartment().getDepartmentId())
+//                .orElseThrow(() -> new RuntimeException("Department with id " + employee.getDepartment().getDepartmentId() + " is not found"));
+//
+//        Position position = positionRepo.findById(employee.getPosition().getPositionId())
+//                .orElseThrow(() -> new RuntimeException("Position with id " + employee.getPosition().getPositionId() + " is not found"));
+//
+//        employeeFromDb.setFirstName(employee.getFirstName());
+//        employeeFromDb.setLastName(employee.getLastName());
+//        employeeFromDb.setDateOfBirth(employee.getDateOfBirth());
+//        employeeFromDb.setEmail(employee.getEmail());
+//        employeeFromDb.setGender(employee.getGender());
+//        employeeFromDb.setAddress(employee.getAddress());
+//        employeeFromDb.setIdNumber(employee.getIdNumber());
+//        employeeFromDb.setStartDate(employee.getStartDate());
+//        employeeFromDb.setPhoneNumber(employee.getPhoneNumber());
+//        employeeFromDb.setPassword(employee.getPassword());
+//        employeeFromDb.setImage(employee.getImage());
+//        employeeFromDb.setEmergencyContactName(employee.getEmergencyContactName());
+//        employeeFromDb.setEmergencyContactRelationship(employee.getEmergencyContactRelationship());
+//        employeeFromDb.setEmergencyContactNo(employee.getEmergencyContactNo());
+//        employeeFromDb.setRole(employee.getRole());
+//        employeeFromDb.setDepartment(department);
+//        employeeFromDb.setPosition(position);
+//
+//        employeeRepo.save(employeeFromDb);
+//    }
+@Override
+public void updateEmployee(Long id, EMPUser employee) {
+    EMPUser employeeFromDb = employeeRepo.findById(id)
+            .orElseThrow(() -> new RuntimeException("Employee with id " + id + " is not found"));
 
-        Department department = departmentRepo.findById(employee.getDepartment().getDepartmentId())
-                .orElseThrow(() -> new RuntimeException("Department with id " + employee.getDepartment().getDepartmentId() + " is not found"));
+    Department department = departmentRepo.findById(employee.getDepartment().getDepartmentId())
+            .orElseThrow(() -> new RuntimeException("Department with id " + employee.getDepartment().getDepartmentId() + " is not found"));
 
-        Position position = positionRepo.findById(employee.getPosition().getPositionId())
-                .orElseThrow(() -> new RuntimeException("Position with id " + employee.getPosition().getPositionId() + " is not found"));
+    Position position = positionRepo.findById(employee.getPosition().getPositionId())
+            .orElseThrow(() -> new RuntimeException("Position with id " + employee.getPosition().getPositionId() + " is not found"));
 
-        employeeFromDb.setFirstName(employee.getFirstName());
-        employeeFromDb.setLastName(employee.getLastName());
-        employeeFromDb.setDateOfBirth(employee.getDateOfBirth());
-        employeeFromDb.setEmail(employee.getEmail());
-        employeeFromDb.setGender(employee.getGender());
-        employeeFromDb.setAddress(employee.getAddress());
-        employeeFromDb.setIdNumber(employee.getIdNumber());
-        employeeFromDb.setStartDate(employee.getStartDate());
-        employeeFromDb.setPhoneNumber(employee.getPhoneNumber());
-        employeeFromDb.setPassword(employee.getPassword());
-        employeeFromDb.setImage(employee.getImage());
-        employeeFromDb.setEmergencyContactName(employee.getEmergencyContactName());
-        employeeFromDb.setEmergencyContactRelationship(employee.getEmergencyContactRelationship());
-        employeeFromDb.setEmergencyContactNo(employee.getEmergencyContactNo());
-        employeeFromDb.setRole(employee.getRole());
-        employeeFromDb.setDepartment(department);
-        employeeFromDb.setPosition(position);
+    employeeFromDb.setFirstName(employee.getFirstName());
+    employeeFromDb.setLastName(employee.getLastName());
+    employeeFromDb.setDateOfBirth(employee.getDateOfBirth());
+    employeeFromDb.setEmail(employee.getEmail());
+    employeeFromDb.setGender(employee.getGender());
+    employeeFromDb.setAddress(employee.getAddress());
+    employeeFromDb.setIdNumber(employee.getIdNumber());
+    employeeFromDb.setStartDate(employee.getStartDate());
+    employeeFromDb.setPhoneNumber(employee.getPhoneNumber());
+    employeeFromDb.setPassword(employee.getPassword());
+    employeeFromDb.setImage(employee.getImage());
+    employeeFromDb.setEmergencyContactName(employee.getEmergencyContactName());
+    employeeFromDb.setEmergencyContactRelationship(employee.getEmergencyContactRelationship());
+    employeeFromDb.setEmergencyContactNo(employee.getEmergencyContactNo());
+    employeeFromDb.setRole(employee.getRole());
+    employeeFromDb.setDepartment(department);
+    employeeFromDb.setPosition(position);
 
-        employeeRepo.save(employeeFromDb);
-    }
+    employeeRepo.save(employeeFromDb);
+}
 
     @Override
     public void deleteEmployee(Long id) {
