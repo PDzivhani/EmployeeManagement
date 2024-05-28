@@ -22,8 +22,6 @@ public class Position {
     @NonNull
     private double salary;
 
-    @OneToMany(mappedBy = "position")
-    private Set<EMPUser> EMPUsers;
 
     @Column(name = "is_deleted")
     private boolean deleted = false;
