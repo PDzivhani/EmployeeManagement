@@ -1,6 +1,10 @@
 package com.teamc.ems.controller;
 
+import com.teamc.ems.entity.Department;
 import com.teamc.ems.entity.EMPUser;
+import com.teamc.ems.entity.Position;
+import com.teamc.ems.repository.DepartmentRepo;
+import com.teamc.ems.repository.PositionRepo;
 import com.teamc.ems.service.EmployeesInit;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +24,10 @@ public class EmployeesController {
 
     @Autowired
     private EmployeesInit employeeService;
+    @Autowired
+    private PositionRepo positionRepo;
+    @Autowired
+    private DepartmentRepo departmentRepo;
 
     @GetMapping
     public ResponseEntity<List<EMPUser>> getAllEmployees() {
@@ -114,6 +122,46 @@ public ResponseEntity<EMPUser> updateEmployee(@PathVariable Long id, @RequestBod
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
 }
+    @GetMapping("/profile/{id}")
+    public ResponseEntity<EMPUser> getProfile(@PathVariable Long id) {
+        try {
+            EMPUser user = employeeService.getEmployeeById(id);
+            return new ResponseEntity<>(user, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PutMapping("/profile/{id}")
+    public ResponseEntity<EMPUser> updateProfile(@PathVariable Long id, @RequestBody EMPUser updatedProfile) {
+        try {
+            EMPUser existingUser = employeeService.getEmployeeById(id);
+
+            // Update fields
+            existingUser.setFirstName(updatedProfile.getFirstName());
+            existingUser.setLastName(updatedProfile.getLastName());
+            existingUser.setEmail(updatedProfile.getEmail());
+            existingUser.setPhoneNumber(updatedProfile.getPhoneNumber());
+            existingUser.setAddress(updatedProfile.getAddress());
+            existingUser.setGender(updatedProfile.getGender());
+            existingUser.setDateOfBirth(updatedProfile.getDateOfBirth());
+            existingUser.setStartDate(updatedProfile.getStartDate());
+            existingUser.setImage(updatedProfile.getImage());
+
+            Department department = departmentRepo.findById(updatedProfile.getDepartment().getDepartmentId())
+                    .orElseThrow(() -> new RuntimeException("Department not found"));
+            existingUser.setDepartment(department);
+
+            Position position = positionRepo.findById(updatedProfile.getPosition().getPositionId())
+                    .orElseThrow(() -> new RuntimeException("Position not found"));
+            existingUser.setPosition(position);
+
+            employeeService.saveEmployee(existingUser);
+            return ResponseEntity.ok(existingUser);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
 
 
     @DeleteMapping("/{id}")

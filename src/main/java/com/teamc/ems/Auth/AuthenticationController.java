@@ -1,15 +1,16 @@
 package com.teamc.ems.Auth;
 
+import com.teamc.ems.entity.EMPUser;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
+
 public class AuthenticationController {
 
     private final AuthenticationService service;
@@ -26,5 +27,14 @@ public class AuthenticationController {
             @RequestBody AuthenticationRequest request
             ) {
                 return ResponseEntity.ok(service.authenticate(request));
+    }
+    @PostMapping("/login")
+    public ResponseEntity<EMPUser> login(@RequestParam String email, @RequestParam String password) {
+        try {
+            EMPUser user = service.authenticate(email, password);
+            return new ResponseEntity<>(user, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
     }
 }

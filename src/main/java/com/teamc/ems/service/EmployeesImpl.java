@@ -93,4 +93,9 @@ public class EmployeesImpl implements EmployeesInit {
         employee.setDeleted(false);
         employeeRepo.save(employee);
     }
+    @Override
+    public EMPUser createEmployee(EMPUser employee) {
+        employee.setRole(Role.EMPLOYEE);
+        return employeeRepo.save(employee);
+    }
 }
