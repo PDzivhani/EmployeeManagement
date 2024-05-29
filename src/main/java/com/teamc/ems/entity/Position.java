@@ -5,11 +5,10 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 
-import java.util.Set;
-
 @Getter
 @Setter
 @Entity
+@Table(name = "positions")
 public class Position {
 
     @Id
@@ -20,10 +19,7 @@ public class Position {
     private String positionName;
 
     @NonNull
-    private double salary;
-
-    @ManyToMany(mappedBy = "positions")
-    private Set<EMPUser> EMPUsers;
+    private Double salary;
 
     @Column(name = "is_deleted")
     private boolean deleted = false;

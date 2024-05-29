@@ -8,10 +8,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 @RestController
 @RequestMapping("/api/positions")
+@CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
 public class PositionController {
+    private static final Logger logger = Logger.getLogger(PositionController.class.getName());
 
     @Autowired
     private PositionInit positionService;
@@ -27,7 +30,7 @@ public class PositionController {
         return new ResponseEntity<>(position, HttpStatus.OK);
     }
 
-    @PostMapping
+    @PostMapping("/create")
     public ResponseEntity<Position> createPosition(@RequestBody Position position) {
         Position newPosition = positionService.createPosition(position);
         return new ResponseEntity<>(newPosition, HttpStatus.CREATED);

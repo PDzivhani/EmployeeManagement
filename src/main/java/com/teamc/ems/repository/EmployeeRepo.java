@@ -8,4 +8,5 @@ import java.util.List;
 public interface EmployeeRepo extends JpaRepository<EMPUser, Long> {
     List<EMPUser>findByDeletedFalse();
 
+    List<EMPUser> findByDeletedTrue();
 }
