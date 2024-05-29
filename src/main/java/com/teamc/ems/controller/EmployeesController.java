@@ -75,7 +75,7 @@ public class EmployeesController {
         }
     }
 
-    @PostMapping
+    @PostMapping("/create")
     public ResponseEntity<EMPUser> createEmployee(@RequestBody EMPUser employee) {
         logger.info("POST /api/employees called");
         try {
@@ -85,6 +85,11 @@ public class EmployeesController {
             logger.severe("POST /api/employees failed: " + e.getMessage());
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @PostMapping
+    public void saveEmployee(@RequestBody EMPUser empUser){
+        this.employeeService.saveEmployee(empUser);
     }
 
 

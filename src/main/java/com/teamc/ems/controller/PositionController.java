@@ -1,5 +1,6 @@
 package com.teamc.ems.controller;
 
+import com.teamc.ems.entity.EMPUser;
 import com.teamc.ems.entity.Position;
 import com.teamc.ems.service.PositionInit;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,11 @@ public class PositionController {
     public ResponseEntity<Position> createPosition(@RequestBody Position position) {
         Position newPosition = positionService.createPosition(position);
         return new ResponseEntity<>(newPosition, HttpStatus.CREATED);
+    }
+
+    @PostMapping
+    public void savePosition(@RequestBody Position position){
+        this.positionService.savePosition(position);
     }
 
     @PutMapping("/{id}")

@@ -1,6 +1,7 @@
 package com.teamc.ems.controller;
 
 import com.teamc.ems.entity.Department;
+import com.teamc.ems.entity.EMPUser;
 import com.teamc.ems.service.DepartmentInit;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +50,7 @@ public class DepartmentController {
         }
     }
 
-    @PostMapping
+    @PostMapping("/create")
     public ResponseEntity<Department> createDepartment(@RequestBody Department department) {
         logger.info("POST /api/departments called");
         try {
@@ -59,6 +60,11 @@ public class DepartmentController {
             logger.severe("POST /api/departments failed: " + e.getMessage());
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @PostMapping
+    public void saveDepartment(@RequestBody Department department){
+        this.departmentService.saveDepartments(department);
     }
 
     @PutMapping("/{id}")
