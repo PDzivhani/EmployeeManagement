@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 @RestController
-@RequestMapping("/api/departments")
+@RequestMapping("/api/v1/departments")
 @CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
 public class DepartmentController {
 

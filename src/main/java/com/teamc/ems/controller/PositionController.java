@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 @RestController
-@RequestMapping("/api/positions")
+@RequestMapping("/api/v1/positions")
 @CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
 public class PositionController {
     private static final Logger logger = Logger.getLogger(PositionController.class.getName());
