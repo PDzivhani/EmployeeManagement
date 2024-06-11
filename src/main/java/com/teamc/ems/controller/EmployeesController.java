@@ -6,10 +6,12 @@ import com.teamc.ems.entity.Position;
 import com.teamc.ems.repository.DepartmentRepo;
 import com.teamc.ems.repository.PositionRepo;
 import com.teamc.ems.service.EmployeesInit;
+import com.teamc.ems.user.Role;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,7 +30,8 @@ public class EmployeesController {
     private PositionRepo positionRepo;
     @Autowired
     private DepartmentRepo departmentRepo;
-
+    @Autowired
+    private PasswordEncoder passwordEncoder;
     @GetMapping
     public ResponseEntity<List<EMPUser>> getAllEmployees() {
         logger.info("GET /api/employees called");
@@ -86,8 +89,10 @@ public class EmployeesController {
     @PostMapping
     public ResponseEntity<EMPUser> createEmployee(@RequestBody EMPUser employee) {
         logger.info("POST /api/employees called");
+        String encryptedPassword = passwordEncoder.encode(employee.getPassword());
         try {
             EMPUser newEmployee = employeeService.createEmployee(employee);
+            employee.setRole(Role.Employee);
             return new ResponseEntity<>(newEmployee, HttpStatus.CREATED);
         } catch (Exception e) {
             logger.severe("POST /api/employees failed: " + e.getMessage());
