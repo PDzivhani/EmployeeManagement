@@ -1,5 +1,7 @@
 package com.teamc.ems.controller;
 
+import com.teamc.ems.Auth.AuthenticationResponse;
+import com.teamc.ems.config.JwtService;
 import com.teamc.ems.entity.Department;
 import com.teamc.ems.entity.EMPUser;
 import com.teamc.ems.entity.Position;
@@ -7,7 +9,9 @@ import com.teamc.ems.repository.DepartmentRepo;
 import com.teamc.ems.repository.PositionRepo;
 import com.teamc.ems.service.EmployeesInit;
 import com.teamc.ems.user.Role;
+import com.teamc.ems.user.User;
 import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +24,7 @@ import java.util.logging.Logger;
 @RestController
 @RequestMapping("/api/employees")
 @CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
+@RequiredArgsConstructor
 public class EmployeesController {
 
     private static final Logger logger = Logger.getLogger(EmployeesController.class.getName());
@@ -32,6 +37,8 @@ public class EmployeesController {
     private DepartmentRepo departmentRepo;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
+
     @GetMapping
     public ResponseEntity<List<EMPUser>> getAllEmployees() {
         logger.info("GET /api/employees called");
@@ -59,6 +66,7 @@ public class EmployeesController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
     @GetMapping("/deleted")
     public ResponseEntity<List<EMPUser>> getDeletedEmployees() {
         logger.info("GET /api/employees/deleted called");
@@ -87,46 +95,61 @@ public class EmployeesController {
     }
 
     @PostMapping
-    public ResponseEntity<EMPUser> createEmployee(@RequestBody EMPUser employee) {
+    public ResponseEntity<AuthenticationResponse> createEmployee(@RequestBody EMPUser employee) {
         logger.info("POST /api/employees called");
         String encryptedPassword = passwordEncoder.encode(employee.getPassword());
+        employee.setPassword(encryptedPassword);
         try {
-            EMPUser newEmployee = employeeService.createEmployee(employee);
             employee.setRole(Role.Employee);
-            return new ResponseEntity<>(newEmployee, HttpStatus.CREATED);
+            EMPUser newEmployee = employeeService.createEmployee(employee);
+            var jwtToken = jwtService.generateTokenFromUsername(newEmployee.getEmail());
+
+            // Convert EMPUser to User
+            User user = User.builder()
+                    .firstname(newEmployee.getFirstName())
+                    .lastname(newEmployee.getLastName())
+                    .email(newEmployee.getEmail())
+                    .password(newEmployee.getPassword())
+                    .role(newEmployee.getRole())
+                    .build();
+
+            return ResponseEntity.ok(AuthenticationResponse.builder()
+                    .user(user)
+                    .token(jwtToken)
+                    .build());
         } catch (Exception e) {
             logger.severe("POST /api/employees failed: " + e.getMessage());
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-
-@PutMapping("/{id}")
-public ResponseEntity<EMPUser> updateEmployee(@PathVariable Long id, @RequestBody EMPUser updatedEmployee) {
-    try {
-        EMPUser existingEmployee = employeeService.getEmployeeById(id);
-        // Update fields
-        existingEmployee.setFirstName(updatedEmployee.getFirstName());
-        existingEmployee.setLastName(updatedEmployee.getLastName());
-        existingEmployee.setGender(updatedEmployee.getGender());
-        existingEmployee.setPhoneNumber(updatedEmployee.getPhoneNumber());
-        existingEmployee.setEmail(updatedEmployee.getEmail());
-        existingEmployee.setAddress(updatedEmployee.getAddress());
-        existingEmployee.setIdNumber(updatedEmployee.getIdNumber());
-        existingEmployee.setPassword(updatedEmployee.getPassword());
-        existingEmployee.setStartDate(updatedEmployee.getStartDate());
-        existingEmployee.setDateOfBirth(updatedEmployee.getDateOfBirth());
-        existingEmployee.setDepartment(updatedEmployee.getDepartment());
-        existingEmployee.setPosition(updatedEmployee.getPosition());
-        existingEmployee.setEmergencyContactName(updatedEmployee.getEmergencyContactName());
-        existingEmployee.setEmergencyContactRelationship(updatedEmployee.getEmergencyContactRelationship());
-        existingEmployee.setEmergencyContactNo(updatedEmployee.getEmergencyContactNo());
-        employeeService.saveEmployee(existingEmployee);
-        return ResponseEntity.ok(existingEmployee);
-    } catch (Exception e) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    @PutMapping("/{id}")
+    public ResponseEntity<EMPUser> updateEmployee(@PathVariable Long id, @RequestBody EMPUser updatedEmployee) {
+        try {
+            EMPUser existingEmployee = employeeService.getEmployeeById(id);
+            // Update fields
+            existingEmployee.setFirstName(updatedEmployee.getFirstName());
+            existingEmployee.setLastName(updatedEmployee.getLastName());
+            existingEmployee.setGender(updatedEmployee.getGender());
+            existingEmployee.setPhoneNumber(updatedEmployee.getPhoneNumber());
+            existingEmployee.setEmail(updatedEmployee.getEmail());
+            existingEmployee.setAddress(updatedEmployee.getAddress());
+            existingEmployee.setIdNumber(updatedEmployee.getIdNumber());
+            existingEmployee.setPassword(updatedEmployee.getPassword());
+            existingEmployee.setStartDate(updatedEmployee.getStartDate());
+            existingEmployee.setDateOfBirth(updatedEmployee.getDateOfBirth());
+            existingEmployee.setDepartment(updatedEmployee.getDepartment());
+            existingEmployee.setPosition(updatedEmployee.getPosition());
+            existingEmployee.setEmergencyContactName(updatedEmployee.getEmergencyContactName());
+            existingEmployee.setEmergencyContactRelationship(updatedEmployee.getEmergencyContactRelationship());
+            existingEmployee.setEmergencyContactNo(updatedEmployee.getEmergencyContactNo());
+            employeeService.saveEmployee(existingEmployee);
+            return ResponseEntity.ok(existingEmployee);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
-}
+
     @GetMapping("/profile/{id}")
     public ResponseEntity<EMPUser> getProfile(@PathVariable Long id) {
         try {
@@ -167,7 +190,6 @@ public ResponseEntity<EMPUser> updateEmployee(@PathVariable Long id, @RequestBod
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
-
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteEmployee(@PathVariable Long id) {
